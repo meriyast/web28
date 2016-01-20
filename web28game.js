@@ -55,13 +55,8 @@ function hostPrepareGame(gameId) {
  */
 function hostStartGame(gameId) {
     console.log('Game Started.');
-    //sendWord(0,gameId);
 };
 
-function sendWord(wordPoolIndex, gameId) {
-    var data = getWordData(wordPoolIndex);
-    io.sockets.in(data.gameId).emit('first4Cards', data);
-}
 
 /**
  * A player answered correctly. Time for the next word.

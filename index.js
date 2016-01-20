@@ -65,13 +65,6 @@ io.sockets.on('connection', function (client) {
     	//io.sockets.emit("remainingCards", pack.length)
   	});
 
-  	client.on('firstBet', function() {
-  		var data = {
-  			myId: client.id,
-  			currentPlayer: currentPlayer
-  		}
-  		client.emit('firstBet', data);
-  	})
 });
 
 Object.size = function(obj) {  

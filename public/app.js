@@ -28,7 +28,6 @@ jQuery(function($){
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('showCards', IO.showCards);
-            IO.socket.on('firstBet', IO.firstBet);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
@@ -85,9 +84,6 @@ jQuery(function($){
             App[App.myRole].showCards(data);
         },
 
-        firstBet : function(data) {
-            App['Player'].firstBet(data);
-        },
         /**
          * A player answered. If this is the host, check the answer.
          * @param data
@@ -149,6 +145,7 @@ var App = {
         bindEvents: function () {
             // Host
 
+            App.$doc.on('click', '#btnSecondDeal', App.Host.onSecondDeal);
             App.$doc.on('click', '#btnCreateGame', App.Host.onCreateClick);
 
             // Player
@@ -234,6 +231,7 @@ var App = {
                 App.countDown( $secondsLeft, 5, function(){
                    // IO.socket.emit('hostCountdownFinished', App.gameId);
                     $('#hostWord').text('Game has Started');
+
                 });
 
                 // Display the players' names on screen
@@ -258,7 +256,9 @@ var App = {
                 // Update the data for the current round
               /*  App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;*/
-            },
+
+            }
+
         },
 
         Player : {
@@ -334,40 +334,8 @@ var App = {
                 });
                 // Insert the list onto the screen.
                 $('#gameArea').html($list);
-                IO.socket.emit('firstBet')
-            },
-
-            firstBet : function(data) {
-                var $slider = $('<div/>').attr('id', 'slider')
-                                    .attr('style', 'width: 20%;');
-
-                var $slider_p = $('<p/>');
-                var $slider_label = $('<label/>').text('Bet Value:')
-                var $slider_value = $('<input/>').attr('type', 'text')
-                                    .attr('id', 'slider-value')
-                                    .attr('readOnly', '')
-                                    .attr('style', 'border:0; color:#f6931f; font-weight:bold;');
-                $slider_p.append($slider_label);
-                $slider_p.append($slider_value);
-
-                $("#slider").slider(
-                    {
-                        value:14,
-                        min: 14,
-                        max: 28,
-                        slide: function( event, ui ) {
-                            $( "#slider-value" ).html( ui.value );
-                        }
-                    }
-                );
-
-                $( "#slider-value" ).html(  $('#slider').slider('value') );
-                if (data.myId === data.currentPlayer) {
-                    $('#gameArea').append($slider_p);
-
-                    $('#gameArea').append($slider);
-                }
             }
+
         },
 
         doTextFit : function(el) {
@@ -414,7 +382,8 @@ var App = {
 
 }
 
-    IO.init();
-    App.init();
+IO.init();
+App.init();
+
 
 }($));

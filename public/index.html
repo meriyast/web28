@@ -10,7 +10,7 @@
     <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
 
     <link href="styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" type="text/css" media="all" />
 </head>
 
 <body>
@@ -18,7 +18,6 @@
 
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
-          <input type="text" data-slider="true" data-slider-range="14,28">
     </div>
 
     <!-- Main Title Screen that appears when the page loads for the first time -->
@@ -79,6 +78,15 @@
     <script id="host-game-template" type="text/template">
         <div id="wordArea">
             <div id="hostWord">5</div>
+        </div>
+        <div id="gameControls" style="position:relative;top:130px">
+            <div class="buttons">
+
+                <button id="btnSecondDeal" class="btn left">Second Deal</button>
+                <button id="btnPlayGame" class="btn right">Play!</button>
+                <div style="clear:both"></div>
+            </div>
+
         </div>
         <div id="playerScores">
             <div id="player1Score" class="playerScore">
