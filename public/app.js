@@ -28,6 +28,7 @@ jQuery(function($){
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('showCards', IO.showCards);
+             IO.socket.on('showAllHand', IO.showAllHand);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
@@ -82,6 +83,14 @@ jQuery(function($){
 
             // Change the word for the Host and Player
             App[App.myRole].showCards(data);
+        },
+
+        showAllHand : function(data) {
+            // Update the current round
+            App.currentRound = data.round;
+
+            // Change the word for the Host and Player
+            App[App.myRole].showAllHand(data);
         },
 
         /**
@@ -140,12 +149,12 @@ var App = {
             App.$templateNewGame = $('#create-game-template').html();
             App.$templateJoinGame = $('#join-game-template').html();
             App.$hostGame = $('#host-game-template').html();
+            App.$gameControls = $('#create-game-controls').html();
         },
 
         bindEvents: function () {
             // Host
 
-            App.$doc.on('click', '#btnSecondDeal', App.Host.onSecondDeal);
             App.$doc.on('click', '#btnCreateGame', App.Host.onCreateClick);
 
             // Player
@@ -153,6 +162,7 @@ var App = {
             App.$doc.on('click', '#btnStart',App.Player.onPlayerStartClick);
             App.$doc.on('click', '.btnAnswer',App.Player.onPlayerAnswerClick);
             App.$doc.on('click', '#btnPlayerRestart', App.Player.onPlayerRestart);
+            App.$doc.on('click', '#btnSecondDeal', App.Player.onSecondDeal)
         },
 
         showInitScreen: function() {
@@ -257,6 +267,17 @@ var App = {
               /*  App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;*/
 
+            }, 
+
+            showAllHand : function(data) {
+                // Insert the new word into the DOM
+                $('#hostWord').text('Now Game has Started');
+                App.doTextFit('#hostWord');
+
+                // Update the data for the current round
+              /*  App.Host.currentCorrectAnswer = data.answer;
+                App.Host.currentRound = data.round;*/
+
             }
 
         },
@@ -266,6 +287,8 @@ var App = {
             hostSocketId: '',
 
             myName: '',
+
+            cardsInHand: [],
 
             onJoinClick: function () {
                 console.log('Clicked "Join A Game"');
@@ -334,7 +357,36 @@ var App = {
                 });
                 // Insert the list onto the screen.
                 $('#gameArea').html($list);
-            }
+
+                App.Player.cardsInHand.push.apply(App.Player.cardsInHand, data);
+                $('#gameArea').append(App.$gameControls);
+            },
+
+            onSecondDeal : function() {
+                IO.socket.emit('secondDeal', App.Player.cardsInHand);
+            },
+
+            showAllHand : function(data) {
+                // Create an unordered list element
+                // Insert a list item for each word in the word list
+                // received from the server.
+                $('#ulAnswers').empty();
+                $.each(data, function(){
+                    $('#ulAnswers')                                //  <ul> </ul>
+                        .append( $('<li/>')              //  <ul> <li> </li> </ul>
+                            .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
+                                .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                .val(this)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(this)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                            )
+                        )
+                });
+                // Insert the list onto the screen.
+            $('#gameArea').html($('#ulAnswers'));
+  
+            console.log('in show all hand');
+            },
 
         },
 

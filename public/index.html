@@ -19,6 +19,18 @@
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
     </div>
+    <script id="create-game-controls" type="text/template">
+
+        <div id="gameControls" style="position:relative;top:130px">
+            <div class="buttons">
+
+                <button id="btnSecondDeal" class="btn left">Second Deal</button>
+                <button id="btnPlayGame" class="btn right">Play!</button>
+                <div style="clear:both"></div>
+            </div>
+
+        </div>
+    </script>
 
     <!-- Main Title Screen that appears when the page loads for the first time -->
     <script id="intro-screen-template" type="text/template">
@@ -78,15 +90,6 @@
     <script id="host-game-template" type="text/template">
         <div id="wordArea">
             <div id="hostWord">5</div>
-        </div>
-        <div id="gameControls" style="position:relative;top:130px">
-            <div class="buttons">
-
-                <button id="btnSecondDeal" class="btn left">Second Deal</button>
-                <button id="btnPlayGame" class="btn right">Play!</button>
-                <div style="clear:both"></div>
-            </div>
-
         </div>
         <div id="playerScores">
             <div id="player1Score" class="playerScore">

@@ -62,9 +62,16 @@ io.sockets.on('connection', function (client) {
 	client.on('dealCards', function(){
     	var cards = game.draw(pack, 4, "", true);
     	client.emit('showCards', cards);
-    	//io.sockets.emit("remainingCards", pack.length)
+    	console.log("remainingCards: " + pack.length)
   	});
 
+	client.on('secondDeal', function(cardsInHand){
+    	var cards = game.draw(pack, 4, "", true);
+    	cardsInHand.push.apply(cardsInHand, cards);
+    	client.emit('showAllHand', cardsInHand);
+    	console.log("remainingCards: " + pack.length)
+
+  	});
 });
 
 Object.size = function(obj) {  
